@@ -28,6 +28,7 @@ const blogSchema = mongoose.Schema({
 	author: { type: String, required: true },
 	title: { type: String, required: true },
 	content: { type: String, required: true },
+	id: { type: Number, required: true },
 })
 // 3.2. 定义 Model( 与集合对应 , 可以操作集合 )
 // 会在数据库集合test中生成 chatmsgs 这样一个文档

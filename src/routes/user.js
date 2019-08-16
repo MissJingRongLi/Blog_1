@@ -12,7 +12,6 @@ const handleUserRouter = (req, res) => {
 	//登录
 	if(method === 'POST' && path === '/api/user/login'){
 		const {username, password} = req.body
-		console.log(username+'====='+password)
 		return login(username, password).then(data => {return resultCheck(data)})
 	}
 }

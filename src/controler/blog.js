@@ -2,51 +2,34 @@
  * 只专注于数据
  */
 const {BlogModel} = require('../../db/model')
+const {execFind, 
+	execFindId,
+	execDel,
+	execUpdate,
+	execNew} = require('../tools/appTools')
 const getList = (author, keyword) => {
-	return [
-		{
-			id : '1',
-			name : 'zhangsan',
-			content : '内容1',
-			author : 'zhangsan'
-		},
-		{
-			id : '2',
-			name : 'zhangsan2',
-			content : '内容2',
-			author : 'zhangsan2'
-		}
-	]
+	return execFind(BlogModel,author, keyword)
 }
 
 const getDetail = (id) => {
-	return [
-		{
-			id : '1',
-			name : 'zhangsan',
-			content : '内容1',
-			author : 'zhangsan'
-		},
-	]
+	return execFindId(BlogModel, id)
 }
 
 const newBlog = (blogData) => {
-	return {
-		id : 3
-	}
+	return execNew(BlogModel, blogData)
 }
 
-const updateBlog = (id, blogData) => {
-	return true
+const updateBlog = (id, content, title) => {
+	return execUpdate(BlogModel, id, content, title)
 }
 
 const delBlog = (id) => {
-	return false
+	return execDel(BlogModel, id)
 }
 module.exports = {
 	getList,
 	getDetail,
 	newBlog,
 	updateBlog,
-	delBlog
+	delBlog,
 }

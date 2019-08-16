@@ -5,7 +5,8 @@ const {getList,
 	   getDetail,
 	   newBlog,
 	   updateBlog,
-	   delBlog
+	   delBlog,
+	   execUpdate
 	} = require('../controler/blog')
 const {SuccessModule, ErrorModule} = require('../module/resModule')
 const {resultCheck} = require('../tools/appTools')
@@ -20,33 +21,44 @@ const handleBlogRouter = (req, res) => {
 	if(method === 'GET' && path === '/api/blog/list'){
 		const author = req.query.author || ''
 		const keyword = req.query.keyword || ''
-		const listData = getList(author, keyword)
-		return new SuccessModule(listData)
+		const listData = getList(author, keyword).then(data => {
+			if(data){
+				return new SuccessModule(data)
+			}else{
+				return new ErrorModule()
+			}
+		})
+		return listData
+		
 	}
 
 	// 获取博客详情
 	if(method === 'GET' && path === '/api/blog/detail'){
-		const detailData = getDetail(id)
-		return new SuccessModule(detailData)
+		const detailData = getDetail(id).then(data => {
+			if(data){
+				return new SuccessModule(data)
+			}else{
+				return new ErrorModule()
+			}
+		})
+		return detailData
+	}
+
+	// 新建博客
+	if(method === 'POST' && path === '/api/blog/new'){
+		const blogData = req.body
+		return newBlog(blogData).then(data => {return resultCheck(data)})
 	}
 
 	// 更新博客
-	if(method === 'POST' && path === '/api/blog/new'){
-		const content = req.body
-		const newData = newBlog(content)
-		return new SuccessModule(newData)
-	}
-
-	// 获取博客更新
 	if(method === 'POST' && path === '/api/blog/update'){
-		const content = req.body
-		const result = updateBlog(id, content)
-		return resultCheck(result)
+		const content = req.body.content
+		const title = req.body.title
+		return updateBlog(id, content, title).then(data => {return resultCheck(data)})
 	}
 	// 获取博客删除
 	if(method === 'POST' && path === '/api/blog/del'){
-		const result = delBlog(id)
-		return resultCheck(result)
+		return delBlog(id).then(data => {return resultCheck(data)})
 	}
 }
 

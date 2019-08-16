@@ -16,6 +16,10 @@ const serverHandle = (req, res) => {
 	const url = req.url
 	const path = url.split('?')[0]
 
+	// 解析cookie
+	const cookieStr = req.headers.cookie
+	console.log(cookieStr)
+
 	// 解析query
 	req.query = querystring.parse(url.split('?')[1])
 
@@ -26,8 +30,12 @@ const serverHandle = (req, res) => {
 		const blogData = handleBlogRouter(req, res)
 		if (blogData) {
 			// 是一个promise对象
-			res.end(JSON.stringify(blogData))
-			return
+			blogData.then(results => {
+				res.end(JSON.stringify(results))
+			}).catch(err => {
+				console.log(err)
+			})
+			return 
 		}
 		// 处理user相关的路由
 		const userData = handleUserRouter(req, res)
